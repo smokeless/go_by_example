@@ -1,0 +1,28 @@
+package main
+
+import "time"
+import "fmt"
+
+func goSelect() {
+	c1 := make(chan string)
+	c2 := make(chan string)
+
+	go func() {
+		time.Sleep(1 * time.Second)
+		c1 <- "one"
+	}()
+
+	go func() {
+		time.Sleep(2 * time.Second)
+		c2 <- "two"
+	}()
+
+	for i := 0; i < 2; i++ {
+		select { //select lets you wait on channel operations
+		case msg1 := <-c1:
+			fmt.Println("rcvd:", msg1)
+		case msg2 := <-c2:
+			fmt.Println("recvd:", msg2)
+		}
+	}
+}
